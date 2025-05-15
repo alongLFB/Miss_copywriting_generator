@@ -1,103 +1,188 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Button } from "../components/ui/button";
+import DatePicker from "../components/ui/DatePicker";
+import { Input } from "../components/ui/input";
+import { Copy, Check } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { Card, CardContent } from "../components/ui/card";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [name, setName] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [message, setMessage] = useState("");
+  const [selectedEmoji, setSelectedEmoji] = useState("❤️");
+  const [luyuanStartDate, setLuyuanStartDate] = useState("2025-05-01");
+  const [mcStartDate, setMcStartDate] = useState("2025-05-08");
+  const [customStartDate, setCustomStartDate] = useState("2025-05-16");
+  const [copied, setCopied] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  const emojis = ["❤️", "😢", "😭", "🥺", "😔", "💔", "🫶", "😊"];
+
+  const handleGenerateLuyuanMessage = () => {
+    const startDate = new Date(luyuanStartDate);
+    const currentDate = new Date(date);
+    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setMessage(`卢院不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  };
+
+  const handleGenerateMCMessage = () => {
+    const startDate = new Date(mcStartDate);
+    const currentDate = new Date(date);
+    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setMessage(`MC不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  };
+
+  const handleGenerateCustomMessage = () => {
+    if (!name) {
+      alert("请输入自定义名字");
+      return;
+    }
+    const startDate = new Date(customStartDate);
+    const currentDate = new Date(date);
+    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setMessage(`${name} 不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(message);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-8">
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6">
+          <h1 className="text-2xl font-bold mb-4 text-center">
+            思念文案生成器
+          </h1>
+
+          <Tabs defaultValue="basic" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="basic">基本设置</TabsTrigger>
+              <TabsTrigger value="advanced">高级设置</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="basic" className="space-y-4 mt-4">
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">输入自定义名字</label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">选择日期</label>
+                <DatePicker
+                  selectedDate={date}
+                  onChange={(date) => setDate(date)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">选择表情</label>
+                <Select value={selectedEmoji} onValueChange={setSelectedEmoji}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择表情" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {emojis.map((emoji) => (
+                      <SelectItem key={emoji} value={emoji}>
+                        {emoji}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="advanced" className="space-y-4 mt-4">
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">卢院起始日期</label>
+                <Input
+                  type="date"
+                  value={luyuanStartDate}
+                  onChange={(e) => setLuyuanStartDate(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">MC起始日期</label>
+                <Input
+                  type="date"
+                  value={mcStartDate}
+                  onChange={(e) => setMcStartDate(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">自定义人起始日期</label>
+                <Input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <Button onClick={handleGenerateLuyuanMessage} className="flex-1">
+              思念卢院一键生成
+            </Button>
+            <Button onClick={handleGenerateMCMessage} className="flex-1">
+              思念MC一键生成
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 mt-6">
+            <Button onClick={handleGenerateCustomMessage} className="flex-1">
+              思念“自定义名字”一键生成
+            </Button>
+          </div>
+
+          {message && (
+            <div className="mt-4">
+              <div className="flex items-center justify-between p-4 bg-slate-100 rounded-md">
+                <p className="text-lg">{message}</p>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={handleCopy}
+                  className="ml-2 h-8 w-8"
+                  title="复制文案"
+                >
+                  {copied ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              {copied && (
+                <p className="text-xs text-green-600 mt-1 text-right">
+                  已复制到剪贴板
+                </p>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
