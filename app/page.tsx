@@ -28,6 +28,7 @@ export default function Home() {
   const [luyuanStartDate, setLuyuanStartDate] = useState("2025-05-01");
   const [mcStartDate, setMcStartDate] = useState("2025-05-08");
   const [customStartDate, setCustomStartDate] = useState("2025-05-16");
+  const [dongjieStartDate, setDongjieStartDate] = useState("2025-05-29");
   const [copied, setCopied] = useState(false);
 
   const emojis = ["❤️", "😢", "😭", "🥺", "😔", "💔", "🫶", "😊"];
@@ -58,6 +59,14 @@ export default function Home() {
     const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     setMessage(`${name} 不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  };
+
+  const handleGenerateDongjieMessage = () => {
+    const startDate = new Date(dongjieStartDate);
+    const currentDate = new Date(date);
+    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    setMessage(`东杰离开 Reem 约饭群的第${dayDiff}天，想他 ${selectedEmoji}`);
   };
 
   const handleCopy = async () => {
@@ -131,6 +140,15 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col space-y-2">
+                <label className="text-sm font-medium">东杰起始日期</label>
+                <Input
+                  type="date"
+                  value={dongjieStartDate}
+                  onChange={(e) => setDongjieStartDate(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col space-y-2">
                 <label className="text-sm font-medium">自定义人起始日期</label>
                 <Input
                   type="date"
@@ -141,18 +159,21 @@ export default function Home() {
             </TabsContent>
           </Tabs>
 
-          <div className="grid grid-cols-2 gap-4 mt-6">
-            <Button onClick={handleGenerateLuyuanMessage} className="flex-1">
+          <div className="grid grid-cols-2 gap-2 mt-6">
+            <Button onClick={handleGenerateLuyuanMessage} className="flex-1 text-xs">
               思念卢院一键生成
             </Button>
-            <Button onClick={handleGenerateMCMessage} className="flex-1">
+            <Button onClick={handleGenerateMCMessage} className="flex-1 text-xs">
               思念MC一键生成
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 mt-6">
+          <div className="grid grid-cols-1 gap-4 mt-4">
+          <Button onClick={handleGenerateDongjieMessage} className="flex-1 text-xs">
+              思念东杰一键生成
+            </Button>
             <Button onClick={handleGenerateCustomMessage} className="flex-1">
-              思念“自定义名字”一键生成
+              思念"自定义名字"一键生成
             </Button>
           </div>
 
