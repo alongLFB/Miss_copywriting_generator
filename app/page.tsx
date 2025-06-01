@@ -33,19 +33,41 @@ export default function Home() {
 
   const emojis = ["❤️", "😢", "😭", "🥺", "😔", "💔", "🫶", "😊"];
 
-  const handleGenerateLuyuanMessage = () => {
-    const startDate = new Date(luyuanStartDate);
-    const currentDate = new Date(date);
-    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
+  // 改进的本地时区日期计算函数
+  const calculateDayDifference = (
+    startDateString: string,
+    currentDate: Date
+  ) => {
+    // 使用本地时区创建起始日期（避免UTC转换）
+    const [year, month, day] = startDateString.split("-").map(Number);
+    const startDate = new Date(year, month - 1, day); // month需要减1因为Date构造函数的月份是0-based
+
+    // 创建当前日期的本地时区午夜时间
+    const currentDateStart = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+
+    // 计算时间差
+    const timeDiff = currentDateStart.getTime() - startDate.getTime();
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    return dayDiff;
+  };
+
+  // 添加一个工具函数来获取当前本地时区信息（可选，用于调试）
+  const getCurrentTimezone = () => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  };
+
+  const handleGenerateLuyuanMessage = () => {
+    const dayDiff = calculateDayDifference(luyuanStartDate, date);
     setMessage(`卢院不在的第${dayDiff}天，想他 ${selectedEmoji}`);
   };
 
   const handleGenerateMCMessage = () => {
-    const startDate = new Date(mcStartDate);
-    const currentDate = new Date(date);
-    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const dayDiff = calculateDayDifference(mcStartDate, date);
     setMessage(`MC不在的第${dayDiff}天，想他 ${selectedEmoji}`);
   };
 
@@ -54,19 +76,20 @@ export default function Home() {
       alert("请输入自定义名字");
       return;
     }
-    const startDate = new Date(customStartDate);
-    const currentDate = new Date(date);
-    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const dayDiff = calculateDayDifference(customStartDate, date);
     setMessage(`${name} 不在的第${dayDiff}天，想他 ${selectedEmoji}`);
   };
 
   const handleGenerateDongjieMessage = () => {
-    const startDate = new Date(dongjieStartDate);
-    const currentDate = new Date(date);
-    const timeDiff = Math.abs(currentDate.getTime() - startDate.getTime());
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const dayDiff = calculateDayDifference(dongjieStartDate, date);
     setMessage(`东杰离开 Reem 约饭群的第${dayDiff}天，想他 ${selectedEmoji}`);
+  };
+
+  const formatDateForInput = (dateString: string) => {
+    if (dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString;
+    }
+    return dateString.split("T")[0];
   };
 
   const handleCopy = async () => {
@@ -82,6 +105,10 @@ export default function Home() {
           <h1 className="text-2xl font-bold mb-4 text-center">
             思念文案生成器
           </h1>
+
+          <p className="text-xs text-gray-500 text-center mb-4">
+            当前时区: {getCurrentTimezone()}
+          </p>
 
           <Tabs defaultValue="basic" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
@@ -125,7 +152,7 @@ export default function Home() {
                 <label className="text-sm font-medium">卢院起始日期</label>
                 <Input
                   type="date"
-                  value={luyuanStartDate}
+                  value={formatDateForInput(luyuanStartDate)}
                   onChange={(e) => setLuyuanStartDate(e.target.value)}
                 />
               </div>
@@ -134,7 +161,7 @@ export default function Home() {
                 <label className="text-sm font-medium">MC起始日期</label>
                 <Input
                   type="date"
-                  value={mcStartDate}
+                  value={formatDateForInput(mcStartDate)}
                   onChange={(e) => setMcStartDate(e.target.value)}
                 />
               </div>
@@ -143,7 +170,7 @@ export default function Home() {
                 <label className="text-sm font-medium">东杰起始日期</label>
                 <Input
                   type="date"
-                  value={dongjieStartDate}
+                  value={formatDateForInput(dongjieStartDate)}
                   onChange={(e) => setDongjieStartDate(e.target.value)}
                 />
               </div>
@@ -152,7 +179,7 @@ export default function Home() {
                 <label className="text-sm font-medium">自定义人起始日期</label>
                 <Input
                   type="date"
-                  value={customStartDate}
+                  value={formatDateForInput(customStartDate)}
                   onChange={(e) => setCustomStartDate(e.target.value)}
                 />
               </div>
@@ -160,16 +187,25 @@ export default function Home() {
           </Tabs>
 
           <div className="grid grid-cols-2 gap-2 mt-6">
-            <Button onClick={handleGenerateLuyuanMessage} className="flex-1 text-xs">
+            <Button
+              onClick={handleGenerateLuyuanMessage}
+              className="flex-1 text-xs"
+            >
               思念卢院一键生成
             </Button>
-            <Button onClick={handleGenerateMCMessage} className="flex-1 text-xs">
+            <Button
+              onClick={handleGenerateMCMessage}
+              className="flex-1 text-xs"
+            >
               思念MC一键生成
             </Button>
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4">
-          <Button onClick={handleGenerateDongjieMessage} className="flex-1 text-xs">
+            <Button
+              onClick={handleGenerateDongjieMessage}
+              className="flex-1 text-xs"
+            >
               思念东杰一键生成
             </Button>
             <Button onClick={handleGenerateCustomMessage} className="flex-1">
