@@ -42,15 +42,8 @@ export default function Home() {
     const [year, month, day] = startDateString.split("-").map(Number);
     const startDate = new Date(year, month - 1, day); // month需要减1因为Date构造函数的月份是0-based
 
-    // 创建当前日期的本地时区午夜时间
-    const currentDateStart = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      currentDate.getDate()
-    );
-
     // 计算时间差
-    const timeDiff = currentDateStart.getTime() - startDate.getTime();
+    const timeDiff = currentDate.getTime() - startDate.getTime();
     const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     return dayDiff;
