@@ -25,10 +25,10 @@ export default function Home() {
   const [date, setDate] = useState(new Date());
   const [message, setMessage] = useState("");
   const [selectedEmoji, setSelectedEmoji] = useState("❤️");
-  const [luyuanStartDate, setLuyuanStartDate] = useState("2025-05-01");
-  const [mcStartDate, setMcStartDate] = useState("2025-05-08");
-  const [customStartDate, setCustomStartDate] = useState("2025-05-16");
-  const [dongjieStartDate, setDongjieStartDate] = useState("2025-05-29");
+  const [heZongStartDate, setHeZongStartDate] = useState("2025-07-02");
+  const [xuZongStartDate, setXuZongStartDate] = useState("2025-07-04");
+  const [customStartDate, setCustomStartDate] = useState("2025-07-06");
+  const [karenStartDate, setKarenStartDate] = useState("2025-07-06");
   const [copied, setCopied] = useState(false);
 
   const emojis = ["❤️", "😢", "😭", "🥺", "😔", "💔", "🫶", "😊"];
@@ -61,14 +61,14 @@ export default function Home() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
   };
 
-  const handleGenerateLuyuanMessage = () => {
-    const dayDiff = calculateDayDifference(luyuanStartDate, date);
-    setMessage(`卢院不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  const handleGenerateHeZongMessage = () => {
+    const dayDiff = calculateDayDifference(heZongStartDate, date);
+    setMessage(`何总不在的第${dayDiff}天，想她 ${selectedEmoji}`);
   };
 
-  const handleGenerateMCMessage = () => {
-    const dayDiff = calculateDayDifference(mcStartDate, date);
-    setMessage(`MC不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+  const handleGenerateXuZongMessage = () => {
+    const dayDiff = calculateDayDifference(xuZongStartDate, date);
+    setMessage(`徐总不在的第${dayDiff}天，想她 ${selectedEmoji}`);
   };
 
   const handleGenerateCustomMessage = () => {
@@ -77,12 +77,12 @@ export default function Home() {
       return;
     }
     const dayDiff = calculateDayDifference(customStartDate, date);
-    setMessage(`${name} 不在的第${dayDiff}天，想他 ${selectedEmoji}`);
+    setMessage(`${name} 不在的第${dayDiff}天，想他/她 ${selectedEmoji}`);
   };
 
-  const handleGenerateDongjieMessage = () => {
-    const dayDiff = calculateDayDifference(dongjieStartDate, date);
-    setMessage(`东杰离开 Reem 约饭群的第${dayDiff}天，想他 ${selectedEmoji}`);
+  const handleGenerateKarenMessage = () => {
+    const dayDiff = calculateDayDifference(karenStartDate, date);
+    setMessage(`卡人不在的第${dayDiff}天，想她 ${selectedEmoji}`);
   };
 
   const formatDateForInput = (dateString: string) => {
@@ -152,8 +152,8 @@ export default function Home() {
                 <label className="text-sm font-medium">卢院起始日期</label>
                 <Input
                   type="date"
-                  value={formatDateForInput(luyuanStartDate)}
-                  onChange={(e) => setLuyuanStartDate(e.target.value)}
+                  value={formatDateForInput(heZongStartDate)}
+                  onChange={(e) => setHeZongStartDate(e.target.value)}
                 />
               </div>
 
@@ -161,8 +161,8 @@ export default function Home() {
                 <label className="text-sm font-medium">MC起始日期</label>
                 <Input
                   type="date"
-                  value={formatDateForInput(mcStartDate)}
-                  onChange={(e) => setMcStartDate(e.target.value)}
+                  value={formatDateForInput(xuZongStartDate)}
+                  onChange={(e) => setXuZongStartDate(e.target.value)}
                 />
               </div>
 
@@ -170,8 +170,8 @@ export default function Home() {
                 <label className="text-sm font-medium">东杰起始日期</label>
                 <Input
                   type="date"
-                  value={formatDateForInput(dongjieStartDate)}
-                  onChange={(e) => setDongjieStartDate(e.target.value)}
+                  value={formatDateForInput(karenStartDate)}
+                  onChange={(e) => setKarenStartDate(e.target.value)}
                 />
               </div>
 
@@ -188,25 +188,25 @@ export default function Home() {
 
           <div className="grid grid-cols-2 gap-2 mt-6">
             <Button
-              onClick={handleGenerateLuyuanMessage}
+              onClick={handleGenerateXuZongMessage}
               className="flex-1 text-xs"
             >
-              思念卢院一键生成
+              思念徐总一键生成
             </Button>
             <Button
-              onClick={handleGenerateMCMessage}
+              onClick={handleGenerateHeZongMessage}
               className="flex-1 text-xs"
             >
-              思念MC一键生成
+              思念何总一键生成
             </Button>
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4">
             <Button
-              onClick={handleGenerateDongjieMessage}
+              onClick={handleGenerateKarenMessage}
               className="flex-1 text-xs"
             >
-              思念东杰一键生成
+              思念卡姐一键生成
             </Button>
             <Button onClick={handleGenerateCustomMessage} className="flex-1">
               思念“自定义名字”一键生成
