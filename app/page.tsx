@@ -44,7 +44,7 @@ export default function Home() {
 
     // 计算时间差
     const timeDiff = currentDate.getTime() - startDate.getTime();
-    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
 
     return dayDiff;
   };
